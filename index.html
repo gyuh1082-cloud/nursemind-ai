@@ -1,74 +1,296 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>NurseMind AI</title>
-    <style>
-        body {
-            font-family: Arial;
-            margin: 40px;
-            background-color: #f4f7fb;
-        }
-        h1 {
-            color: #1f4e79;
-        }
-        .card {
-            background: white;
-            padding: 20px;
-            border-radius: 12px;
-            margin-top: 20px;
-            box-shadow: 0px 2px 8px rgba(0,0,0,0.1);
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NurseMind AI</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f7fb;
+      margin: 0;
+      padding: 0;
+      color: #1f2937;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 32px 20px 60px;
+    }
+
+    .hero {
+      background: white;
+      border-radius: 16px;
+      padding: 28px;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+      margin-bottom: 24px;
+    }
+
+    h1 {
+      margin: 0 0 8px 0;
+      color: #1f4e79;
+      font-size: 2.2rem;
+    }
+
+    h2 {
+      color: #1f4e79;
+      margin-top: 0;
+    }
+
+    .subtitle {
+      font-size: 1.05rem;
+      color: #4b5563;
+      margin-bottom: 0;
+    }
+
+    .card {
+      background: white;
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      font-weight: bold;
+      margin: 14px 0 6px;
+    }
+
+    input, textarea, select {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+      box-sizing: border-box;
+      font-size: 1rem;
+    }
+
+    textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    button {
+      margin-top: 18px;
+      background: #1f4e79;
+      color: white;
+      border: none;
+      padding: 12px 18px;
+      border-radius: 10px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #163b5c;
+    }
+
+    .results {
+      display: none;
+    }
+
+    .pill {
+      display: inline-block;
+      background: #e8f1fb;
+      color: #1f4e79;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 0.9rem;
+      margin-bottom: 10px;
+    }
+
+    .high {
+      color: #b91c1c;
+      font-weight: bold;
+    }
+
+    .moderate {
+      color: #b45309;
+      font-weight: bold;
+    }
+
+    .low {
+      color: #166534;
+      font-weight: bold;
+    }
+
+    ul {
+      padding-left: 20px;
+    }
+
+    .disclaimer {
+      font-size: 0.92rem;
+      color: #6b7280;
+      margin-top: 18px;
+    }
+  </style>
 </head>
 <body>
+  <div class="container">
+    <div class="hero">
+      <h1>NurseMind AI 🩺</h1>
+      <p class="subtitle">Clinical Risk & Nursing Priorities Simulator</p>
+    </div>
 
-<h1>NurseMind AI 🩺</h1>
-<h3>Clinical Risk & Nursing Priorities Simulator</h3>
+    <div class="card">
+      <h2>Enter a Patient Case</h2>
 
-<div class="card">
-    <h2>💡 Project Purpose</h2>
-    <p>
-        I built this project to simulate how nurses assess patient safety,
-        identify risks, and prioritize care.
-    </p>
-</div>
+      <label for="age">Patient age</label>
+      <input type="number" id="age" value="78" min="0" max="120" />
 
-<div class="card">
-    <h2>🧪 Example Patient Case</h2>
-    <p><strong>Patient:</strong> 78 years old, dizziness, low blood pressure</p>
-</div>
+      <label for="symptoms">Symptoms</label>
+      <textarea id="symptoms">dizziness, weakness</textarea>
 
-<div class="card">
-    <h2>⚠️ Risk Flags</h2>
-    <ul>
-        <li>Fall risk</li>
-        <li>Low blood pressure concern</li>
-    </ul>
-</div>
+      <label for="bp">Systolic blood pressure</label>
+      <input type="number" id="bp" value="92" min="50" max="250" />
 
-<div class="card">
-    <h2>👩‍⚕️ Nursing Actions</h2>
-    <ul>
-        <li>Assist patient when walking</li>
-        <li>Monitor blood pressure</li>
-    </ul>
-</div>
+      <label for="temp">Temperature (F)</label>
+      <input type="number" id="temp" value="98.7" min="90" max="110" step="0.1" />
 
-<div class="card">
-    <h2>📚 Patient Education</h2>
-    <ul>
-        <li>Stand slowly</li>
-        <li>Ask for help before walking</li>
-    </ul>
-</div>
+      <label for="oxygen">Oxygen saturation (%)</label>
+      <input type="number" id="oxygen" value="97" min="50" max="100" />
 
-<div class="card">
-    <h2>🧠 Why This Matters</h2>
-    <p>
-        Nursing is not just about treating patients, but identifying risks early
-        and preventing harm. This project reflects my interest in becoming a nurse practitioner.
-    </p>
-</div>
+      <label for="meds">Medications</label>
+      <textarea id="meds">blood pressure medication, antibiotic</textarea>
 
+      <button onclick="analyzeCase()">Analyze Patient Case</button>
+
+      <p class="disclaimer">
+        This project is for educational purposes only. It does not diagnose, treat, or replace professional medical judgment.
+      </p>
+    </div>
+
+    <div class="card results" id="resultsCard">
+      <span class="pill">Interactive Analysis</span>
+      <h2>Results</h2>
+
+      <h3>Risk Flags</h3>
+      <ul id="riskFlags"></ul>
+
+      <h3>Priority Nursing Actions</h3>
+      <ul id="actions"></ul>
+
+      <h3>Patient Education</h3>
+      <ul id="education"></ul>
+
+      <h3>Why These Were Flagged</h3>
+      <ul id="reasons"></ul>
+
+      <h3>Escalation Level</h3>
+      <p id="escalation"></p>
+    </div>
+  </div>
+
+  <script>
+    function analyzeCase() {
+      const age = Number(document.getElementById("age").value);
+      const symptoms = document.getElementById("symptoms").value.toLowerCase();
+      const bp = Number(document.getElementById("bp").value);
+      const temp = Number(document.getElementById("temp").value);
+      const oxygen = Number(document.getElementById("oxygen").value);
+      const meds = document.getElementById("meds").value.toLowerCase();
+
+      const riskFlags = [];
+      const actions = [];
+      const education = [];
+      const reasons = [];
+      let escalation = "Low";
+
+      if (age >= 65 && symptoms.includes("dizziness")) {
+        riskFlags.push("Fall risk");
+        actions.push("Assist with walking and prevent walking alone.");
+        education.push("Stand up slowly and ask for help before walking.");
+        reasons.push("Older age plus dizziness increases the chance of falling.");
+        escalation = escalation === "Low" ? "Moderate" : escalation;
+      }
+
+      if (bp < 95) {
+        riskFlags.push("Low blood pressure concern");
+        actions.push("Recheck blood pressure and assess for fainting or weakness.");
+        education.push("Report fainting, worsening dizziness, or weakness.");
+        reasons.push("Low systolic blood pressure can reduce stability and cause dizziness.");
+        escalation = escalation === "Low" ? "Moderate" : escalation;
+      }
+
+      if (symptoms.includes("fever") || temp >= 100.4) {
+        riskFlags.push("Possible infection");
+        actions.push("Monitor temperature and watch for worsening symptoms.");
+        education.push("Take medicine exactly as prescribed and report worsening fever.");
+        reasons.push("Fever may suggest infection or a worsening illness.");
+        escalation = escalation === "Low" ? "Moderate" : escalation;
+      }
+
+      if (symptoms.includes("cough") && oxygen < 94) {
+        riskFlags.push("Respiratory concern");
+        actions.push("Monitor breathing and oxygen level closely.");
+        education.push("Get help right away for trouble breathing.");
+        reasons.push("Cough with low oxygen can signal a breathing problem.");
+        escalation = "High";
+      }
+
+      if (symptoms.includes("shortness of breath")) {
+        riskFlags.push("Breathing difficulty");
+        actions.push("Assess breathing immediately.");
+        education.push("Call for urgent help if breathing gets worse.");
+        reasons.push("Shortness of breath can become serious quickly.");
+        escalation = "High";
+      }
+
+      if (symptoms.includes("weakness") && (symptoms.includes("vomiting") || symptoms.includes("diarrhea"))) {
+        riskFlags.push("Dehydration risk");
+        actions.push("Monitor fluid intake and signs of dehydration.");
+        education.push("Drink fluids if allowed and report worsening weakness.");
+        reasons.push("Vomiting or diarrhea with weakness can lead to dehydration.");
+        escalation = escalation === "Low" ? "Moderate" : escalation;
+      }
+
+      if (meds.includes("antibiotic") && symptoms.includes("dizziness")) {
+        riskFlags.push("Possible medication side effect");
+        actions.push("Review recent medication changes.");
+        education.push("Tell a provider when symptoms started after a new medicine.");
+        reasons.push("New symptoms after starting a medication may point to a side effect.");
+      }
+
+      if (age >= 65 && symptoms.includes("confusion")) {
+        riskFlags.push("Urgent mental status change");
+        actions.push("Assess patient immediately and notify provider.");
+        education.push("New confusion should be reported right away.");
+        reasons.push("Confusion in an older adult can be a serious warning sign.");
+        escalation = "High";
+      }
+
+      if (riskFlags.length === 0) {
+        riskFlags.push("No major high-risk flags detected from current inputs.");
+        actions.push("Continue routine monitoring.");
+        education.push("Follow provider instructions and report new symptoms.");
+        reasons.push("The entered information did not trigger major safety rules.");
+      }
+
+      renderList("riskFlags", riskFlags);
+      renderList("actions", actions);
+      renderList("education", education);
+      renderList("reasons", reasons);
+
+      const escalationElement = document.getElementById("escalation");
+      escalationElement.textContent = escalation;
+      escalationElement.className =
+        escalation === "High" ? "high" :
+        escalation === "Moderate" ? "moderate" : "low";
+
+      document.getElementById("resultsCard").style.display = "block";
+    }
+
+    function renderList(elementId, items) {
+      const ul = document.getElementById(elementId);
+      ul.innerHTML = "";
+      items.forEach(item => {
+        const li = document.createElement("li");
+        li.textContent = item;
+        ul.appendChild(li);
+      });
+    }
+  </script>
 </body>
 </html>
