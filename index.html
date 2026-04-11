@@ -86,6 +86,7 @@
       border-radius: 10px;
       font-size: 1rem;
       cursor: pointer;
+      margin-right: 10px;
     }
 
     button:hover {
@@ -152,6 +153,20 @@
     <div class="hero">
       <h1>NurseMind AI 🩺</h1>
       <p class="subtitle">Clinical Risk & Nursing Priorities Simulator</p>
+    </div>
+
+    <div class="card">
+      <h2>Load a Sample Patient Case</h2>
+
+      <label for="sampleCase">Choose a sample case</label>
+      <select id="sampleCase">
+        <option value="">Select a case</option>
+        <option value="fall">Older adult fall risk</option>
+        <option value="respiratory">Respiratory concern</option>
+        <option value="dehydration">Dehydration concern</option>
+      </select>
+
+      <button onclick="loadSampleCase()">Load Sample Case</button>
     </div>
 
     <div class="card">
@@ -286,6 +301,61 @@
   </div>
 
   <script>
+    function loadSampleCase() {
+      const selected = document.getElementById("sampleCase").value;
+
+      if (selected === "fall") {
+        document.getElementById("age").value = 82;
+        document.getElementById("bp").value = 90;
+        document.getElementById("temp").value = 98.4;
+        document.getElementById("oxygen").value = 96;
+        document.getElementById("heartRate").value = 96;
+        document.getElementById("pain").value = 2;
+        document.getElementById("mobility").value = "Needs assistance";
+        document.getElementById("mentalStatus").value = "Alert and oriented";
+        document.getElementById("appetite").value = "Poor";
+        document.getElementById("fluidIntake").value = "Reduced";
+        document.getElementById("fallHistory").value = "Yes";
+        document.getElementById("condition").value = "hypertension";
+        document.getElementById("symptoms").value = "dizziness, weakness";
+        document.getElementById("meds").value = "blood pressure medication";
+      }
+
+      if (selected === "respiratory") {
+        document.getElementById("age").value = 68;
+        document.getElementById("bp").value = 108;
+        document.getElementById("temp").value = 101.5;
+        document.getElementById("oxygen").value = 90;
+        document.getElementById("heartRate").value = 118;
+        document.getElementById("pain").value = 5;
+        document.getElementById("mobility").value = "Needs assistance";
+        document.getElementById("mentalStatus").value = "Confused";
+        document.getElementById("appetite").value = "Poor";
+        document.getElementById("fluidIntake").value = "Reduced";
+        document.getElementById("fallHistory").value = "No";
+        document.getElementById("condition").value = "COPD";
+        document.getElementById("symptoms").value = "cough, shortness of breath, fever, weakness";
+        document.getElementById("meds").value = "inhaler, antibiotic";
+      }
+
+      if (selected === "dehydration") {
+        document.getElementById("age").value = 74;
+        document.getElementById("bp").value = 94;
+        document.getElementById("temp").value = 99.1;
+        document.getElementById("oxygen").value = 97;
+        document.getElementById("heartRate").value = 112;
+        document.getElementById("pain").value = 4;
+        document.getElementById("mobility").value = "Needs assistance";
+        document.getElementById("mentalStatus").value = "Lethargic";
+        document.getElementById("appetite").value = "Not eating";
+        document.getElementById("fluidIntake").value = "Very low";
+        document.getElementById("fallHistory").value = "No";
+        document.getElementById("condition").value = "diabetes";
+        document.getElementById("symptoms").value = "weakness, vomiting, diarrhea";
+        document.getElementById("meds").value = "antibiotic";
+      }
+    }
+
     function analyzeCase() {
       const age = Number(document.getElementById("age").value);
       const symptoms = document.getElementById("symptoms").value.toLowerCase();
