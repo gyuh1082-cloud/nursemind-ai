@@ -14,7 +14,7 @@
     }
 
     .container {
-      max-width: 900px;
+      max-width: 1000px;
       margin: 0 auto;
       padding: 32px 20px 60px;
     }
@@ -33,9 +33,8 @@
       font-size: 2.2rem;
     }
 
-    h2 {
+    h2, h3 {
       color: #1f4e79;
-      margin-top: 0;
     }
 
     .subtitle {
@@ -50,6 +49,12 @@
       padding: 24px;
       box-shadow: 0 4px 14px rgba(0,0,0,0.08);
       margin-bottom: 20px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
     }
 
     label {
@@ -116,6 +121,15 @@
       font-weight: bold;
     }
 
+    .urgent-box {
+      background: #fee2e2;
+      border-left: 6px solid #dc2626;
+      padding: 14px;
+      border-radius: 10px;
+      margin-top: 16px;
+      display: none;
+    }
+
     ul {
       padding-left: 20px;
     }
@@ -124,6 +138,12 @@
       font-size: 0.92rem;
       color: #6b7280;
       margin-top: 18px;
+    }
+
+    @media (max-width: 700px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
@@ -137,20 +157,89 @@
     <div class="card">
       <h2>Enter a Patient Case</h2>
 
-      <label for="age">Patient age</label>
-      <input type="number" id="age" value="78" min="0" max="120" />
+      <div class="grid">
+        <div>
+          <label for="age">Patient age</label>
+          <input type="number" id="age" value="78" min="0" max="120" />
+        </div>
+
+        <div>
+          <label for="bp">Systolic blood pressure</label>
+          <input type="number" id="bp" value="92" min="50" max="250" />
+        </div>
+
+        <div>
+          <label for="temp">Temperature (F)</label>
+          <input type="number" id="temp" value="98.7" min="90" max="110" step="0.1" />
+        </div>
+
+        <div>
+          <label for="oxygen">Oxygen saturation (%)</label>
+          <input type="number" id="oxygen" value="97" min="50" max="100" />
+        </div>
+
+        <div>
+          <label for="heartRate">Heart rate</label>
+          <input type="number" id="heartRate" value="88" min="30" max="220" />
+        </div>
+
+        <div>
+          <label for="pain">Pain level (0-10)</label>
+          <input type="number" id="pain" value="3" min="0" max="10" />
+        </div>
+
+        <div>
+          <label for="mobility">Mobility</label>
+          <select id="mobility">
+            <option>Independent</option>
+            <option selected>Needs assistance</option>
+            <option>Bedbound</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="mentalStatus">Mental status</label>
+          <select id="mentalStatus">
+            <option selected>Alert and oriented</option>
+            <option>Confused</option>
+            <option>Lethargic</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="appetite">Appetite</label>
+          <select id="appetite">
+            <option>Normal</option>
+            <option selected>Poor</option>
+            <option>Not eating</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="fluidIntake">Fluid intake</label>
+          <select id="fluidIntake">
+            <option>Normal</option>
+            <option selected>Reduced</option>
+            <option>Very low</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="fallHistory">Recent fall?</label>
+          <select id="fallHistory">
+            <option>No</option>
+            <option selected>Yes</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="condition">Chronic conditions</label>
+          <input type="text" id="condition" value="hypertension" />
+        </div>
+      </div>
 
       <label for="symptoms">Symptoms</label>
       <textarea id="symptoms">dizziness, weakness</textarea>
-
-      <label for="bp">Systolic blood pressure</label>
-      <input type="number" id="bp" value="92" min="50" max="250" />
-
-      <label for="temp">Temperature (F)</label>
-      <input type="number" id="temp" value="98.7" min="90" max="110" step="0.1" />
-
-      <label for="oxygen">Oxygen saturation (%)</label>
-      <input type="number" id="oxygen" value="97" min="50" max="100" />
 
       <label for="meds">Medications</label>
       <textarea id="meds">blood pressure medication, antibiotic</textarea>
@@ -166,17 +255,30 @@
       <span class="pill">Interactive Analysis</span>
       <h2>Results</h2>
 
+      <div id="urgentBox" class="urgent-box">
+        <strong>Urgent Review Recommended:</strong> This case includes higher-risk findings that may require rapid nursing escalation.
+      </div>
+
+      <h3>Priority Level</h3>
+      <p id="priorityLevel"></p>
+
       <h3>Risk Flags</h3>
       <ul id="riskFlags"></ul>
 
       <h3>Priority Nursing Actions</h3>
       <ul id="actions"></ul>
 
+      <h3>Monitoring Focus</h3>
+      <ul id="monitoring"></ul>
+
       <h3>Patient Education</h3>
       <ul id="education"></ul>
 
       <h3>Why These Were Flagged</h3>
       <ul id="reasons"></ul>
+
+      <h3>Recommended Reassessment</h3>
+      <ul id="reassessment"></ul>
 
       <h3>Escalation Level</h3>
       <p id="escalation"></p>
@@ -190,88 +292,191 @@
       const bp = Number(document.getElementById("bp").value);
       const temp = Number(document.getElementById("temp").value);
       const oxygen = Number(document.getElementById("oxygen").value);
+      const heartRate = Number(document.getElementById("heartRate").value);
+      const pain = Number(document.getElementById("pain").value);
       const meds = document.getElementById("meds").value.toLowerCase();
+      const mobility = document.getElementById("mobility").value;
+      const mentalStatus = document.getElementById("mentalStatus").value;
+      const appetite = document.getElementById("appetite").value;
+      const fluidIntake = document.getElementById("fluidIntake").value;
+      const fallHistory = document.getElementById("fallHistory").value;
+      const condition = document.getElementById("condition").value.toLowerCase();
 
       const riskFlags = [];
       const actions = [];
+      const monitoring = [];
       const education = [];
       const reasons = [];
+      const reassessment = [];
       let escalation = "Low";
+      let priorityLevel = "Low Priority";
+
+      function raiseToModerate() {
+        if (escalation === "Low") escalation = "Moderate";
+        if (priorityLevel === "Low Priority") priorityLevel = "Moderate Priority";
+      }
+
+      function raiseToHigh() {
+        escalation = "High";
+        priorityLevel = "High Priority";
+      }
 
       if (age >= 65 && symptoms.includes("dizziness")) {
         riskFlags.push("Fall risk");
         actions.push("Assist with walking and prevent walking alone.");
+        monitoring.push("Watch balance, gait, and dizziness when standing.");
         education.push("Stand up slowly and ask for help before walking.");
         reasons.push("Older age plus dizziness increases the chance of falling.");
-        escalation = escalation === "Low" ? "Moderate" : escalation;
+        reassessment.push("Reassess dizziness after movement and position changes.");
+        raiseToModerate();
+      }
+
+      if (fallHistory === "Yes") {
+        riskFlags.push("Repeat fall concern");
+        actions.push("Apply fall precautions and keep needed items within reach.");
+        monitoring.push("Monitor safety with transfers and ambulation.");
+        education.push("Use assistance devices and do not walk alone if unsteady.");
+        reasons.push("A recent fall increases the chance of another fall.");
+        reassessment.push("Reassess mobility and fall safety plan regularly.");
+        raiseToModerate();
+      }
+
+      if (mobility === "Needs assistance" || mobility === "Bedbound") {
+        riskFlags.push("Mobility limitation");
+        actions.push("Support safe movement and repositioning.");
+        monitoring.push("Monitor skin integrity and activity tolerance.");
+        education.push("Ask for help with movement to prevent injury.");
+        reasons.push("Limited mobility can increase safety and skin risks.");
+        reassessment.push("Reassess mobility status during care.");
+        raiseToModerate();
       }
 
       if (bp < 95) {
         riskFlags.push("Low blood pressure concern");
         actions.push("Recheck blood pressure and assess for fainting or weakness.");
+        monitoring.push("Monitor dizziness, weakness, and blood pressure trends.");
         education.push("Report fainting, worsening dizziness, or weakness.");
         reasons.push("Low systolic blood pressure can reduce stability and cause dizziness.");
-        escalation = escalation === "Low" ? "Moderate" : escalation;
+        reassessment.push("Repeat blood pressure after rest or position change.");
+        raiseToModerate();
       }
 
-      if (symptoms.includes("fever") || temp >= 100.4) {
+      if (temp >= 100.4 || symptoms.includes("fever")) {
         riskFlags.push("Possible infection");
         actions.push("Monitor temperature and watch for worsening symptoms.");
+        monitoring.push("Track fever pattern and overall condition.");
         education.push("Take medicine exactly as prescribed and report worsening fever.");
-        reasons.push("Fever may suggest infection or a worsening illness.");
-        escalation = escalation === "Low" ? "Moderate" : escalation;
+        reasons.push("Fever may suggest infection or worsening illness.");
+        reassessment.push("Recheck temperature later in the shift.");
+        raiseToModerate();
       }
 
-      if (symptoms.includes("cough") && oxygen < 94) {
+      if (oxygen < 94 || symptoms.includes("shortness of breath")) {
         riskFlags.push("Respiratory concern");
-        actions.push("Monitor breathing and oxygen level closely.");
+        actions.push("Assess breathing immediately and monitor oxygen closely.");
+        monitoring.push("Watch breathing effort, oxygen level, and fatigue.");
         education.push("Get help right away for trouble breathing.");
-        reasons.push("Cough with low oxygen can signal a breathing problem.");
-        escalation = "High";
+        reasons.push("Low oxygen or shortness of breath can signal significant respiratory compromise.");
+        reassessment.push("Reassess oxygen level and breathing status promptly.");
+        raiseToHigh();
       }
 
-      if (symptoms.includes("shortness of breath")) {
-        riskFlags.push("Breathing difficulty");
-        actions.push("Assess breathing immediately.");
-        education.push("Call for urgent help if breathing gets worse.");
-        reasons.push("Shortness of breath can become serious quickly.");
-        escalation = "High";
+      if (symptoms.includes("cough") && temp >= 100.4) {
+        riskFlags.push("Possible respiratory infection");
+        actions.push("Observe for worsening cough, fever, and breathing changes.");
+        monitoring.push("Monitor cough, sputum changes, and oxygen status.");
+        education.push("Report worsening cough, fever, or breathing difficulty.");
+        reasons.push("Cough plus fever may suggest infection affecting the respiratory system.");
+        reassessment.push("Reassess respiratory symptoms frequently.");
+        raiseToModerate();
       }
 
-      if (symptoms.includes("weakness") && (symptoms.includes("vomiting") || symptoms.includes("diarrhea"))) {
+      if (heartRate > 110) {
+        riskFlags.push("Elevated heart rate");
+        actions.push("Assess for pain, dehydration, fever, or stress response.");
+        monitoring.push("Track pulse and overall status.");
+        education.push("Report palpitations, chest discomfort, or worsening weakness.");
+        reasons.push("A high heart rate can reflect physiological stress or worsening condition.");
+        reassessment.push("Recheck heart rate after rest.");
+        raiseToModerate();
+      }
+
+      if (pain >= 7) {
+        riskFlags.push("High pain burden");
+        actions.push("Assess pain location, severity, and effect on function.");
+        monitoring.push("Monitor pain response and comfort level.");
+        education.push("Report pain that worsens or does not improve.");
+        reasons.push("Severe pain can affect mobility, breathing, rest, and recovery.");
+        reassessment.push("Reassess pain after intervention.");
+        raiseToModerate();
+      }
+
+      if ((symptoms.includes("vomiting") || symptoms.includes("diarrhea") || symptoms.includes("weakness")) &&
+          (fluidIntake === "Reduced" || fluidIntake === "Very low" || appetite === "Poor" || appetite === "Not eating")) {
         riskFlags.push("Dehydration risk");
         actions.push("Monitor fluid intake and signs of dehydration.");
+        monitoring.push("Watch weakness, intake, output, and dry mouth.");
         education.push("Drink fluids if allowed and report worsening weakness.");
-        reasons.push("Vomiting or diarrhea with weakness can lead to dehydration.");
-        escalation = escalation === "Low" ? "Moderate" : escalation;
+        reasons.push("Poor intake plus fluid loss symptoms can lead to dehydration.");
+        reassessment.push("Reassess intake and hydration status.");
+        raiseToModerate();
+      }
+
+      if (mentalStatus === "Confused" || mentalStatus === "Lethargic") {
+        riskFlags.push("Mental status change");
+        actions.push("Assess orientation, safety, and need for provider notification.");
+        monitoring.push("Monitor confusion, alertness, and behavior changes.");
+        education.push("New confusion or severe sleepiness should be reported right away.");
+        reasons.push("A change in mental status can be a serious warning sign.");
+        reassessment.push("Reassess mental status frequently.");
+        raiseToHigh();
       }
 
       if (meds.includes("antibiotic") && symptoms.includes("dizziness")) {
         riskFlags.push("Possible medication side effect");
-        actions.push("Review recent medication changes.");
-        education.push("Tell a provider when symptoms started after a new medicine.");
+        actions.push("Review recent medication changes and timing.");
+        monitoring.push("Track symptom timing after medication use.");
+        education.push("Tell a provider if symptoms started after a new medicine.");
         reasons.push("New symptoms after starting a medication may point to a side effect.");
+        reassessment.push("Reassess symptoms after medication review.");
+        raiseToModerate();
       }
 
-      if (age >= 65 && symptoms.includes("confusion")) {
-        riskFlags.push("Urgent mental status change");
-        actions.push("Assess patient immediately and notify provider.");
-        education.push("New confusion should be reported right away.");
-        reasons.push("Confusion in an older adult can be a serious warning sign.");
-        escalation = "High";
+      if (condition.includes("diabetes") && appetite === "Not eating") {
+        riskFlags.push("Blood sugar management concern");
+        actions.push("Assess eating pattern and risk from reduced intake.");
+        monitoring.push("Monitor for weakness, confusion, or other glucose-related symptoms.");
+        education.push("Do not ignore poor intake when living with diabetes.");
+        reasons.push("Poor intake in a person with diabetes can increase risk of instability.");
+        reassessment.push("Reassess intake and overall symptoms.");
+        raiseToModerate();
+      }
+
+      if (condition.includes("hypertension") && bp < 95 && meds.includes("blood pressure")) {
+        riskFlags.push("Possible overtreatment or medication-related hypotension");
+        actions.push("Review blood pressure medication timing and recent changes.");
+        monitoring.push("Monitor blood pressure pattern and symptom severity.");
+        education.push("Report dizziness or fainting after taking blood pressure medicine.");
+        reasons.push("Low blood pressure in a patient taking blood pressure medication may need closer review.");
+        reassessment.push("Repeat blood pressure and symptom check after medication review.");
+        raiseToModerate();
       }
 
       if (riskFlags.length === 0) {
         riskFlags.push("No major high-risk flags detected from current inputs.");
         actions.push("Continue routine monitoring.");
+        monitoring.push("Watch for any new or worsening symptoms.");
         education.push("Follow provider instructions and report new symptoms.");
         reasons.push("The entered information did not trigger major safety rules.");
+        reassessment.push("Reassess if the patient condition changes.");
       }
 
-      renderList("riskFlags", riskFlags);
-      renderList("actions", actions);
-      renderList("education", education);
-      renderList("reasons", reasons);
+      renderList("riskFlags", uniqueItems(riskFlags));
+      renderList("actions", uniqueItems(actions));
+      renderList("monitoring", uniqueItems(monitoring));
+      renderList("education", uniqueItems(education));
+      renderList("reasons", uniqueItems(reasons));
+      renderList("reassessment", uniqueItems(reassessment));
 
       const escalationElement = document.getElementById("escalation");
       escalationElement.textContent = escalation;
@@ -279,6 +484,13 @@
         escalation === "High" ? "high" :
         escalation === "Moderate" ? "moderate" : "low";
 
+      const priorityElement = document.getElementById("priorityLevel");
+      priorityElement.textContent = priorityLevel;
+      priorityElement.className =
+        priorityLevel === "High Priority" ? "high" :
+        priorityLevel === "Moderate Priority" ? "moderate" : "low";
+
+      document.getElementById("urgentBox").style.display = escalation === "High" ? "block" : "none";
       document.getElementById("resultsCard").style.display = "block";
     }
 
@@ -290,6 +502,10 @@
         li.textContent = item;
         ul.appendChild(li);
       });
+    }
+
+    function uniqueItems(arr) {
+      return [...new Set(arr)];
     }
   </script>
 </body>
