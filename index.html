@@ -7,30 +7,30 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      background: #f4f7fb;
+      background: linear-gradient(to bottom, #eef4fb, #f8fbff);
       margin: 0;
       padding: 0;
       color: #1f2937;
     }
 
     .container {
-      max-width: 1000px;
+      max-width: 1100px;
       margin: 0 auto;
       padding: 32px 20px 60px;
     }
 
     .hero {
       background: white;
-      border-radius: 16px;
-      padding: 28px;
-      box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+      border-radius: 18px;
+      padding: 32px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.08);
       margin-bottom: 24px;
     }
 
     h1 {
-      margin: 0 0 8px 0;
+      margin: 0 0 10px 0;
       color: #1f4e79;
-      font-size: 2.2rem;
+      font-size: 2.4rem;
     }
 
     h2, h3 {
@@ -38,17 +38,17 @@
     }
 
     .subtitle {
-      font-size: 1.05rem;
+      font-size: 1.1rem;
       color: #4b5563;
-      margin-bottom: 0;
+      margin-bottom: 14px;
     }
 
     .card {
       background: white;
-      border-radius: 16px;
+      border-radius: 18px;
       padding: 24px;
-      box-shadow: 0 4px 14px rgba(0,0,0,0.08);
-      margin-bottom: 20px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+      margin-bottom: 22px;
     }
 
     .grid {
@@ -70,6 +70,7 @@
       border-radius: 10px;
       box-sizing: border-box;
       font-size: 1rem;
+      background: #fff;
     }
 
     textarea {
@@ -105,6 +106,7 @@
       border-radius: 999px;
       font-size: 0.9rem;
       margin-bottom: 10px;
+      margin-right: 8px;
     }
 
     .high {
@@ -131,6 +133,15 @@
       display: none;
     }
 
+    .good-box {
+      background: #ecfdf5;
+      border-left: 6px solid #16a34a;
+      padding: 14px;
+      border-radius: 10px;
+      margin-top: 16px;
+      display: none;
+    }
+
     ul {
       padding-left: 20px;
     }
@@ -139,6 +150,11 @@
       font-size: 0.92rem;
       color: #6b7280;
       margin-top: 18px;
+    }
+
+    .small-note {
+      color: #6b7280;
+      font-size: 0.95rem;
     }
 
     @media (max-width: 700px) {
@@ -150,18 +166,24 @@
 </head>
 <body>
   <div class="container">
-   <div class="hero">
-  <h1>NurseMind AI 🩺</h1>
-  <p class="subtitle">Clinical Risk & Nursing Priorities Simulator</p>
-  <p>
-    This project was designed to reflect how nurses identify safety concerns,
-    prioritize care, monitor changes, and educate patients. It combines my
-    interest in nursing and technology through an interactive patient risk simulator.
-  </p>
-</div>
+
+    <div class="hero">
+      <h1>NurseMind AI 🩺</h1>
+      <p class="subtitle">Advanced Clinical Risk & Nursing Priorities Simulator</p>
+      <p>
+        I created this project to reflect how nurses identify safety concerns, prioritize care,
+        monitor changes, and educate patients. It combines my interest in becoming a nurse
+        practitioner with my interest in technology and patient-centered care.
+      </p>
+      <span class="pill">Patient Safety</span>
+      <span class="pill">Clinical Reasoning</span>
+      <span class="pill">Nursing Education</span>
+      <span class="pill">Interactive Web Project</span>
+    </div>
 
     <div class="card">
       <h2>Load a Sample Patient Case</h2>
+      <p class="small-note">Use one of these examples to demo the project quickly.</p>
 
       <label for="sampleCase">Choose a sample case</label>
       <select id="sampleCase">
@@ -169,6 +191,7 @@
         <option value="fall">Older adult fall risk</option>
         <option value="respiratory">Respiratory concern</option>
         <option value="dehydration">Dehydration concern</option>
+        <option value="postop">Post-surgery complication concern</option>
       </select>
 
       <button onclick="loadSampleCase()">Load Sample Case</button>
@@ -267,20 +290,54 @@
       <button onclick="analyzeCase()">Analyze Patient Case</button>
 
       <p class="disclaimer">
-        This project is for educational purposes only. It does not diagnose, treat, or replace professional medical judgment.
+        This project is for educational purposes only. It does not diagnose, treat,
+        or replace professional medical judgment.
+      </p>
+    </div>
+
+    <div class="card">
+      <h2>How Nurses Think</h2>
+      <p>
+        Nurses do more than react to symptoms. They look for patterns, monitor subtle changes,
+        identify safety risks early, and decide what needs attention first. This project was
+        designed to reflect that kind of clinical reasoning.
+      </p>
+    </div>
+
+    <div class="card">
+      <h2>About the Creator</h2>
+      <p>
+        I am a student interested in becoming a nurse practitioner. I built NurseMind AI to
+        explore how technology can support patient safety, nursing judgment, and education.
       </p>
     </div>
 
     <div class="card results" id="resultsCard">
       <span class="pill">Interactive Analysis</span>
+      <span class="pill">Clinical Reasoning Output</span>
       <h2>Results</h2>
 
       <div id="urgentBox" class="urgent-box">
-        <strong>Urgent Review Recommended:</strong> This case includes higher-risk findings that may require rapid nursing escalation.
+        <strong>Urgent Review Recommended:</strong> This case includes higher-risk findings
+        that may require rapid nursing escalation.
       </div>
+
+      <div id="goodBox" class="good-box">
+        <strong>Lower-Acuity Case:</strong> This patient case does not currently trigger major
+        urgent warning signs based on the entered information.
+      </div>
+
+      <h3>Clinical Summary</h3>
+      <p id="clinicalSummary"></p>
+
+      <h3>Severity Score</h3>
+      <p id="severityScore"></p>
 
       <h3>Priority Level</h3>
       <p id="priorityLevel"></p>
+
+      <h3>Recommended Nurse Focus</h3>
+      <ul id="nurseFocus"></ul>
 
       <h3>Risk Flags</h3>
       <ul id="riskFlags"></ul>
@@ -359,6 +416,23 @@
         document.getElementById("symptoms").value = "weakness, vomiting, diarrhea";
         document.getElementById("meds").value = "antibiotic";
       }
+
+      if (selected === "postop") {
+        document.getElementById("age").value = 59;
+        document.getElementById("bp").value = 102;
+        document.getElementById("temp").value = 100.8;
+        document.getElementById("oxygen").value = 93;
+        document.getElementById("heartRate").value = 116;
+        document.getElementById("pain").value = 8;
+        document.getElementById("mobility").value = "Needs assistance";
+        document.getElementById("mentalStatus").value = "Alert and oriented";
+        document.getElementById("appetite").value = "Poor";
+        document.getElementById("fluidIntake").value = "Reduced";
+        document.getElementById("fallHistory").value = "No";
+        document.getElementById("condition").value = "recent surgery";
+        document.getElementById("symptoms").value = "pain, weakness, fever, shortness of breath";
+        document.getElementById("meds").value = "pain medication, antibiotic";
+      }
     }
 
     function analyzeCase() {
@@ -383,8 +457,10 @@
       const education = [];
       const reasons = [];
       const reassessment = [];
+      const nurseFocus = [];
       let escalation = "Low";
       let priorityLevel = "Low Priority";
+      let severity = 0;
 
       function raiseToModerate() {
         if (escalation === "Low") escalation = "Moderate";
@@ -396,6 +472,10 @@
         priorityLevel = "High Priority";
       }
 
+      function addSeverity(points) {
+        severity += points;
+      }
+
       if (age >= 65 && symptoms.includes("dizziness")) {
         riskFlags.push("Fall risk");
         actions.push("Assist with walking and prevent walking alone.");
@@ -403,7 +483,9 @@
         education.push("Stand up slowly and ask for help before walking.");
         reasons.push("Older age plus dizziness increases the chance of falling.");
         reassessment.push("Reassess dizziness after movement and position changes.");
+        nurseFocus.push("Immediate patient safety and fall prevention.");
         raiseToModerate();
+        addSeverity(2);
       }
 
       if (fallHistory === "Yes") {
@@ -413,7 +495,9 @@
         education.push("Use assistance devices and do not walk alone if unsteady.");
         reasons.push("A recent fall increases the chance of another fall.");
         reassessment.push("Reassess mobility and fall safety plan regularly.");
+        nurseFocus.push("Prevent repeat injury and support safe mobility.");
         raiseToModerate();
+        addSeverity(2);
       }
 
       if (mobility === "Needs assistance" || mobility === "Bedbound") {
@@ -423,7 +507,9 @@
         education.push("Ask for help with movement to prevent injury.");
         reasons.push("Limited mobility can increase safety and skin risks.");
         reassessment.push("Reassess mobility status during care.");
+        nurseFocus.push("Protect mobility and prevent complications from reduced movement.");
         raiseToModerate();
+        addSeverity(1);
       }
 
       if (bp < 95) {
@@ -433,7 +519,9 @@
         education.push("Report fainting, worsening dizziness, or weakness.");
         reasons.push("Low systolic blood pressure can reduce stability and cause dizziness.");
         reassessment.push("Repeat blood pressure after rest or position change.");
+        nurseFocus.push("Monitor circulation and reduce instability risk.");
         raiseToModerate();
+        addSeverity(2);
       }
 
       if (temp >= 100.4 || symptoms.includes("fever")) {
@@ -443,7 +531,9 @@
         education.push("Take medicine exactly as prescribed and report worsening fever.");
         reasons.push("Fever may suggest infection or worsening illness.");
         reassessment.push("Recheck temperature later in the shift.");
+        nurseFocus.push("Watch for infection progression.");
         raiseToModerate();
+        addSeverity(2);
       }
 
       if (oxygen < 94 || symptoms.includes("shortness of breath")) {
@@ -453,7 +543,9 @@
         education.push("Get help right away for trouble breathing.");
         reasons.push("Low oxygen or shortness of breath can signal significant respiratory compromise.");
         reassessment.push("Reassess oxygen level and breathing status promptly.");
+        nurseFocus.push("Airway, breathing, and oxygenation are top priority.");
         raiseToHigh();
+        addSeverity(4);
       }
 
       if (symptoms.includes("cough") && temp >= 100.4) {
@@ -463,7 +555,9 @@
         education.push("Report worsening cough, fever, or breathing difficulty.");
         reasons.push("Cough plus fever may suggest infection affecting the respiratory system.");
         reassessment.push("Reassess respiratory symptoms frequently.");
+        nurseFocus.push("Watch for infection-related breathing decline.");
         raiseToModerate();
+        addSeverity(2);
       }
 
       if (heartRate > 110) {
@@ -473,7 +567,9 @@
         education.push("Report palpitations, chest discomfort, or worsening weakness.");
         reasons.push("A high heart rate can reflect physiological stress or worsening condition.");
         reassessment.push("Recheck heart rate after rest.");
+        nurseFocus.push("Monitor for signs of increasing physiological stress.");
         raiseToModerate();
+        addSeverity(2);
       }
 
       if (pain >= 7) {
@@ -483,7 +579,9 @@
         education.push("Report pain that worsens or does not improve.");
         reasons.push("Severe pain can affect mobility, breathing, rest, and recovery.");
         reassessment.push("Reassess pain after intervention.");
+        nurseFocus.push("Improve comfort while checking for underlying complications.");
         raiseToModerate();
+        addSeverity(2);
       }
 
       if ((symptoms.includes("vomiting") || symptoms.includes("diarrhea") || symptoms.includes("weakness")) &&
@@ -494,7 +592,9 @@
         education.push("Drink fluids if allowed and report worsening weakness.");
         reasons.push("Poor intake plus fluid loss symptoms can lead to dehydration.");
         reassessment.push("Reassess intake and hydration status.");
+        nurseFocus.push("Protect hydration status and monitor weakness.");
         raiseToModerate();
+        addSeverity(2);
       }
 
       if (mentalStatus === "Confused" || mentalStatus === "Lethargic") {
@@ -504,7 +604,9 @@
         education.push("New confusion or severe sleepiness should be reported right away.");
         reasons.push("A change in mental status can be a serious warning sign.");
         reassessment.push("Reassess mental status frequently.");
+        nurseFocus.push("Protect safety and respond quickly to neurological changes.");
         raiseToHigh();
+        addSeverity(4);
       }
 
       if (meds.includes("antibiotic") && symptoms.includes("dizziness")) {
@@ -514,7 +616,9 @@
         education.push("Tell a provider if symptoms started after a new medicine.");
         reasons.push("New symptoms after starting a medication may point to a side effect.");
         reassessment.push("Reassess symptoms after medication review.");
+        nurseFocus.push("Compare symptom onset with medication changes.");
         raiseToModerate();
+        addSeverity(1);
       }
 
       if (condition.includes("diabetes") && appetite === "Not eating") {
@@ -524,7 +628,9 @@
         education.push("Do not ignore poor intake when living with diabetes.");
         reasons.push("Poor intake in a person with diabetes can increase risk of instability.");
         reassessment.push("Reassess intake and overall symptoms.");
+        nurseFocus.push("Monitor instability related to poor intake and chronic illness.");
         raiseToModerate();
+        addSeverity(2);
       }
 
       if (condition.includes("hypertension") && bp < 95 && meds.includes("blood pressure")) {
@@ -534,7 +640,21 @@
         education.push("Report dizziness or fainting after taking blood pressure medicine.");
         reasons.push("Low blood pressure in a patient taking blood pressure medication may need closer review.");
         reassessment.push("Repeat blood pressure and symptom check after medication review.");
+        nurseFocus.push("Consider medication-related causes of instability.");
         raiseToModerate();
+        addSeverity(2);
+      }
+
+      if (condition.includes("recent surgery") && (temp >= 100.4 || symptoms.includes("shortness of breath") || pain >= 7)) {
+        riskFlags.push("Post-surgical complication concern");
+        actions.push("Assess for worsening post-operative complications and notify provider as needed.");
+        monitoring.push("Watch fever, pain, breathing, and functional recovery.");
+        education.push("Report worsening pain, fever, or breathing problems right away.");
+        reasons.push("Fever, breathing changes, or severe pain after surgery may require closer evaluation.");
+        reassessment.push("Reassess pain, temperature, and breathing status promptly.");
+        nurseFocus.push("Identify early warning signs of post-operative decline.");
+        raiseToHigh();
+        addSeverity(4);
       }
 
       if (riskFlags.length === 0) {
@@ -544,8 +664,23 @@
         education.push("Follow provider instructions and report new symptoms.");
         reasons.push("The entered information did not trigger major safety rules.");
         reassessment.push("Reassess if the patient condition changes.");
+        nurseFocus.push("Continue safe routine care and observation.");
       }
 
+      if (severity >= 10) {
+        priorityLevel = "High Priority";
+        escalation = "High";
+      } else if (severity >= 5 && escalation !== "High") {
+        priorityLevel = "Moderate Priority";
+        escalation = "Moderate";
+      } else if (severity < 5 && escalation !== "High" && priorityLevel !== "Moderate Priority") {
+        priorityLevel = "Low Priority";
+        escalation = "Low";
+      }
+
+      const clinicalSummary = buildSummary(age, riskFlags, priorityLevel, escalation);
+
+      renderList("nurseFocus", uniqueItems(nurseFocus));
       renderList("riskFlags", uniqueItems(riskFlags));
       renderList("actions", uniqueItems(actions));
       renderList("monitoring", uniqueItems(monitoring));
@@ -553,6 +688,9 @@
       renderList("reasons", uniqueItems(reasons));
       renderList("reassessment", uniqueItems(reassessment));
 
+      document.getElementById("clinicalSummary").textContent = clinicalSummary;
+      document.getElementById("severityScore").textContent = severity + " / 20";
+      
       const escalationElement = document.getElementById("escalation");
       escalationElement.textContent = escalation;
       escalationElement.className =
@@ -566,7 +704,15 @@
         priorityLevel === "Moderate Priority" ? "moderate" : "low";
 
       document.getElementById("urgentBox").style.display = escalation === "High" ? "block" : "none";
+      document.getElementById("goodBox").style.display = escalation === "Low" ? "block" : "none";
       document.getElementById("resultsCard").style.display = "block";
+    }
+
+    function buildSummary(age, risks, priority, escalation) {
+      let topRisks = risks.slice(0, 3).join(", ");
+      return "This " + age + "-year-old patient case was classified as " + priority.toLowerCase() +
+        " with an escalation level of " + escalation.toLowerCase() +
+        ". The main concerns identified were: " + topRisks + ".";
     }
 
     function renderList(elementId, items) {
