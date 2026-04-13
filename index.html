@@ -5,53 +5,102 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>NurseMind AI</title>
   <style>
+    :root {
+      --bg: #f4f8fc;
+      --card: #ffffff;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --primary: #1f4e79;
+      --primary-dark: #163b5c;
+      --border: #d9e3ef;
+      --shadow: 0 8px 22px rgba(0,0,0,0.08);
+      --high: #b91c1c;
+      --moderate: #b45309;
+      --low: #166534;
+      --soft-red: #fee2e2;
+      --soft-green: #ecfdf5;
+      --soft-blue: #eaf3ff;
+      --soft-gold: #fff7ed;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
     body {
-      font-family: Arial, sans-serif;
-      background: linear-gradient(to bottom, #eef4fb, #f8fbff);
       margin: 0;
-      padding: 0;
-      color: #1f2937;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to bottom, #eef5fc, #f8fbff);
+      color: var(--text);
     }
 
     .container {
-      max-width: 1100px;
+      max-width: 1180px;
       margin: 0 auto;
-      padding: 32px 20px 60px;
+      padding: 28px 18px 60px;
     }
 
     .hero {
-      background: white;
-      border-radius: 18px;
-      padding: 32px;
-      box-shadow: 0 6px 18px rgba(0,0,0,0.08);
-      margin-bottom: 24px;
-    }
-
-    h1 {
-      margin: 0 0 10px 0;
-      color: #1f4e79;
-      font-size: 2.4rem;
-    }
-
-    h2, h3 {
-      color: #1f4e79;
-    }
-
-    .subtitle {
-      font-size: 1.1rem;
-      color: #4b5563;
-      margin-bottom: 14px;
-    }
-
-    .card {
-      background: white;
-      border-radius: 18px;
-      padding: 24px;
-      box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+      background: var(--card);
+      border-radius: 22px;
+      padding: 30px;
+      box-shadow: var(--shadow);
       margin-bottom: 22px;
     }
 
-    .grid {
+    h1 {
+      margin: 0 0 8px;
+      color: var(--primary);
+      font-size: 2.5rem;
+    }
+
+    h2, h3 {
+      color: var(--primary);
+      margin-top: 0;
+    }
+
+    .subtitle {
+      color: #4b5563;
+      font-size: 1.08rem;
+      margin: 0 0 14px;
+    }
+
+    .hero p {
+      line-height: 1.6;
+      margin-bottom: 0;
+    }
+
+    .chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .chip {
+      background: var(--soft-blue);
+      color: var(--primary);
+      padding: 7px 12px;
+      border-radius: 999px;
+      font-size: 0.92rem;
+      font-weight: bold;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 22px;
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: 20px;
+      padding: 24px;
+      box-shadow: var(--shadow);
+      margin-bottom: 22px;
+    }
+
+    .input-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 16px;
@@ -66,99 +115,154 @@
     input, textarea, select {
       width: 100%;
       padding: 12px;
-      border: 1px solid #cbd5e1;
-      border-radius: 10px;
-      box-sizing: border-box;
+      border: 1px solid var(--border);
+      border-radius: 12px;
       font-size: 1rem;
       background: #fff;
     }
 
     textarea {
-      min-height: 100px;
+      min-height: 92px;
       resize: vertical;
     }
 
     button {
       margin-top: 18px;
-      background: #1f4e79;
+      background: var(--primary);
       color: white;
       border: none;
       padding: 12px 18px;
-      border-radius: 10px;
+      border-radius: 12px;
       font-size: 1rem;
       cursor: pointer;
       margin-right: 10px;
+      font-weight: bold;
     }
 
     button:hover {
-      background: #163b5c;
+      background: var(--primary-dark);
+    }
+
+    .small-note {
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.5;
     }
 
     .results {
       display: none;
     }
 
-    .pill {
-      display: inline-block;
-      background: #e8f1fb;
-      color: #1f4e79;
-      padding: 6px 10px;
-      border-radius: 999px;
-      font-size: 0.9rem;
-      margin-bottom: 10px;
-      margin-right: 8px;
-    }
-
-    .high {
-      color: #b91c1c;
+    .banner {
+      border-radius: 14px;
+      padding: 14px;
       font-weight: bold;
+      margin-bottom: 16px;
+      display: none;
     }
 
-    .moderate {
-      color: #b45309;
-      font-weight: bold;
-    }
-
-    .low {
-      color: #166534;
-      font-weight: bold;
-    }
-
-    .urgent-box {
-      background: #fee2e2;
+    .banner.high {
+      display: none;
+      background: var(--soft-red);
       border-left: 6px solid #dc2626;
-      padding: 14px;
-      border-radius: 10px;
-      margin-top: 16px;
-      display: none;
+      color: #7f1d1d;
     }
 
-    .good-box {
-      background: #ecfdf5;
-      border-left: 6px solid #16a34a;
-      padding: 14px;
-      border-radius: 10px;
-      margin-top: 16px;
+    .banner.low {
       display: none;
+      background: var(--soft-green);
+      border-left: 6px solid #16a34a;
+      color: #166534;
+    }
+
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+
+    .metric {
+      background: #f8fbff;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 16px;
+    }
+
+    .metric-label {
+      color: var(--muted);
+      font-size: 0.88rem;
+      margin-bottom: 6px;
+    }
+
+    .metric-value {
+      font-size: 1.15rem;
+      font-weight: bold;
+    }
+
+    .score-high {
+      color: var(--high);
+    }
+
+    .score-moderate {
+      color: var(--moderate);
+    }
+
+    .score-low {
+      color: var(--low);
+    }
+
+    .section {
+      margin-top: 22px;
     }
 
     ul {
       padding-left: 20px;
+      margin-bottom: 0;
+    }
+
+    li {
+      margin-bottom: 8px;
+      line-height: 1.45;
+    }
+
+    .pill {
+      display: inline-block;
+      background: var(--soft-blue);
+      color: var(--primary);
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 0.88rem;
+      margin-right: 8px;
+      margin-bottom: 8px;
+    }
+
+    .tag-wrap {
+      margin-top: 10px;
     }
 
     .disclaimer {
-      font-size: 0.92rem;
-      color: #6b7280;
       margin-top: 18px;
+      color: var(--muted);
+      font-size: 0.92rem;
+      line-height: 1.5;
     }
 
-    .small-note {
-      color: #6b7280;
-      font-size: 0.95rem;
+    .footer-card p {
+      margin-bottom: 0;
+      line-height: 1.6;
     }
 
-    @media (max-width: 700px) {
-      .grid {
+    @media (max-width: 900px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .metric-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .input-grid {
         grid-template-columns: 1fr;
       }
     }
@@ -169,196 +273,239 @@
 
     <div class="hero">
       <h1>NurseMind AI 🩺</h1>
-      <p class="subtitle">Advanced Clinical Risk & Nursing Priorities Simulator</p>
+      <p class="subtitle">Advanced Clinical Risk, Patient Safety, and Nursing Priorities Simulator</p>
       <p>
-        I created this project to reflect how nurses identify safety concerns, prioritize care,
-        monitor changes, and educate patients. It combines my interest in becoming a nurse
-        practitioner with my interest in technology and patient-centered care.
+        I built NurseMind AI to reflect how nurses think in real patient care settings: noticing early warning signs,
+        protecting patient safety, prioritizing what matters most, and educating patients clearly. This project combines
+        my interest in becoming a nurse practitioner with my interest in technology and human-centered healthcare.
       </p>
-      <span class="pill">Patient Safety</span>
-      <span class="pill">Clinical Reasoning</span>
-      <span class="pill">Nursing Education</span>
-      <span class="pill">Interactive Web Project</span>
+      <div class="chip-row">
+        <span class="chip">Clinical Reasoning</span>
+        <span class="chip">Patient Safety</span>
+        <span class="chip">Nursing Judgment</span>
+        <span class="chip">Interactive Case Analysis</span>
+      </div>
     </div>
 
-    <div class="card">
-      <h2>Load a Sample Patient Case</h2>
-      <p class="small-note">Use one of these examples to demo the project quickly.</p>
+    <div class="layout">
+      <div>
+        <div class="card">
+          <h2>Load a Demo Case</h2>
+          <p class="small-note">Use a sample case to show the project quickly and clearly.</p>
 
-      <label for="sampleCase">Choose a sample case</label>
-      <select id="sampleCase">
-        <option value="">Select a case</option>
-        <option value="fall">Older adult fall risk</option>
-        <option value="respiratory">Respiratory concern</option>
-        <option value="dehydration">Dehydration concern</option>
-        <option value="postop">Post-surgery complication concern</option>
-      </select>
-
-      <button onclick="loadSampleCase()">Load Sample Case</button>
-    </div>
-
-    <div class="card">
-      <h2>Enter a Patient Case</h2>
-
-      <div class="grid">
-        <div>
-          <label for="age">Patient age</label>
-          <input type="number" id="age" value="78" min="0" max="120" />
-        </div>
-
-        <div>
-          <label for="bp">Systolic blood pressure</label>
-          <input type="number" id="bp" value="92" min="50" max="250" />
-        </div>
-
-        <div>
-          <label for="temp">Temperature (F)</label>
-          <input type="number" id="temp" value="98.7" min="90" max="110" step="0.1" />
-        </div>
-
-        <div>
-          <label for="oxygen">Oxygen saturation (%)</label>
-          <input type="number" id="oxygen" value="97" min="50" max="100" />
-        </div>
-
-        <div>
-          <label for="heartRate">Heart rate</label>
-          <input type="number" id="heartRate" value="88" min="30" max="220" />
-        </div>
-
-        <div>
-          <label for="pain">Pain level (0-10)</label>
-          <input type="number" id="pain" value="3" min="0" max="10" />
-        </div>
-
-        <div>
-          <label for="mobility">Mobility</label>
-          <select id="mobility">
-            <option>Independent</option>
-            <option selected>Needs assistance</option>
-            <option>Bedbound</option>
+          <label for="sampleCase">Choose a patient scenario</label>
+          <select id="sampleCase">
+            <option value="">Select a case</option>
+            <option value="fall">Older adult fall risk</option>
+            <option value="respiratory">Respiratory concern</option>
+            <option value="dehydration">Dehydration concern</option>
+            <option value="postop">Post-surgery complication concern</option>
+            <option value="medication">Medication side effect concern</option>
           </select>
+
+          <button onclick="loadSampleCase()">Load Sample Case</button>
         </div>
 
-        <div>
-          <label for="mentalStatus">Mental status</label>
-          <select id="mentalStatus">
-            <option selected>Alert and oriented</option>
-            <option>Confused</option>
-            <option>Lethargic</option>
-          </select>
+        <div class="card">
+          <h2>Enter a Patient Case</h2>
+
+          <div class="input-grid">
+            <div>
+              <label for="age">Patient age</label>
+              <input type="number" id="age" value="78" min="0" max="120" />
+            </div>
+
+            <div>
+              <label for="bp">Systolic blood pressure</label>
+              <input type="number" id="bp" value="92" min="50" max="250" />
+            </div>
+
+            <div>
+              <label for="temp">Temperature (F)</label>
+              <input type="number" id="temp" value="98.7" min="90" max="110" step="0.1" />
+            </div>
+
+            <div>
+              <label for="oxygen">Oxygen saturation (%)</label>
+              <input type="number" id="oxygen" value="97" min="50" max="100" />
+            </div>
+
+            <div>
+              <label for="heartRate">Heart rate</label>
+              <input type="number" id="heartRate" value="88" min="30" max="220" />
+            </div>
+
+            <div>
+              <label for="pain">Pain level (0-10)</label>
+              <input type="number" id="pain" value="3" min="0" max="10" />
+            </div>
+
+            <div>
+              <label for="mobility">Mobility</label>
+              <select id="mobility">
+                <option>Independent</option>
+                <option selected>Needs assistance</option>
+                <option>Bedbound</option>
+              </select>
+            </div>
+
+            <div>
+              <label for="mentalStatus">Mental status</label>
+              <select id="mentalStatus">
+                <option selected>Alert and oriented</option>
+                <option>Confused</option>
+                <option>Lethargic</option>
+              </select>
+            </div>
+
+            <div>
+              <label for="appetite">Appetite</label>
+              <select id="appetite">
+                <option>Normal</option>
+                <option selected>Poor</option>
+                <option>Not eating</option>
+              </select>
+            </div>
+
+            <div>
+              <label for="fluidIntake">Fluid intake</label>
+              <select id="fluidIntake">
+                <option>Normal</option>
+                <option selected>Reduced</option>
+                <option>Very low</option>
+              </select>
+            </div>
+
+            <div>
+              <label for="fallHistory">Recent fall?</label>
+              <select id="fallHistory">
+                <option>No</option>
+                <option selected>Yes</option>
+              </select>
+            </div>
+
+            <div>
+              <label for="condition">Chronic conditions</label>
+              <input type="text" id="condition" value="hypertension" />
+            </div>
+          </div>
+
+          <label for="symptoms">Symptoms</label>
+          <textarea id="symptoms">dizziness, weakness</textarea>
+
+          <label for="meds">Medications</label>
+          <textarea id="meds">blood pressure medication, antibiotic</textarea>
+
+          <button onclick="analyzeCase()">Analyze Patient Case</button>
+
+          <p class="disclaimer">
+            This project is for educational purposes only. It does not diagnose, treat, or replace professional medical judgment.
+          </p>
         </div>
 
-        <div>
-          <label for="appetite">Appetite</label>
-          <select id="appetite">
-            <option>Normal</option>
-            <option selected>Poor</option>
-            <option>Not eating</option>
-          </select>
-        </div>
-
-        <div>
-          <label for="fluidIntake">Fluid intake</label>
-          <select id="fluidIntake">
-            <option>Normal</option>
-            <option selected>Reduced</option>
-            <option>Very low</option>
-          </select>
-        </div>
-
-        <div>
-          <label for="fallHistory">Recent fall?</label>
-          <select id="fallHistory">
-            <option>No</option>
-            <option selected>Yes</option>
-          </select>
-        </div>
-
-        <div>
-          <label for="condition">Chronic conditions</label>
-          <input type="text" id="condition" value="hypertension" />
+        <div class="card footer-card">
+          <h2>Why This Project Matters</h2>
+          <p>
+            This is not just a basic health app. It is designed to simulate how nurses assess risk, monitor instability,
+            respond to warning signs, and teach patients in ways that help prevent harm. I wanted this project to show that
+            nursing is both compassionate and analytical.
+          </p>
         </div>
       </div>
 
-      <label for="symptoms">Symptoms</label>
-      <textarea id="symptoms">dizziness, weakness</textarea>
+      <div>
+        <div class="card results" id="resultsCard">
+          <h2>Clinical Analysis Dashboard</h2>
 
-      <label for="meds">Medications</label>
-      <textarea id="meds">blood pressure medication, antibiotic</textarea>
+          <div id="highBanner" class="banner high">
+            Urgent Review Recommended: this case includes higher-risk findings that may require rapid escalation.
+          </div>
 
-      <button onclick="analyzeCase()">Analyze Patient Case</button>
+          <div id="lowBanner" class="banner low">
+            Lower-Acuity Case: no major urgent warning signs were triggered from the current inputs.
+          </div>
 
-      <p class="disclaimer">
-        This project is for educational purposes only. It does not diagnose, treat,
-        or replace professional medical judgment.
-      </p>
-    </div>
+          <div class="metric-grid">
+            <div class="metric">
+              <div class="metric-label">Severity Score</div>
+              <div class="metric-value" id="severityScore"></div>
+            </div>
+            <div class="metric">
+              <div class="metric-label">Priority Level</div>
+              <div class="metric-value" id="priorityLevel"></div>
+            </div>
+            <div class="metric">
+              <div class="metric-label">Patient Stability</div>
+              <div class="metric-value" id="stabilityLevel"></div>
+            </div>
+          </div>
 
-    <div class="card">
-      <h2>How Nurses Think</h2>
-      <p>
-        Nurses do more than react to symptoms. They look for patterns, monitor subtle changes,
-        identify safety risks early, and decide what needs attention first. This project was
-        designed to reflect that kind of clinical reasoning.
-      </p>
-    </div>
+          <div class="section">
+            <h3>Clinical Summary</h3>
+            <p id="clinicalSummary"></p>
+          </div>
 
-    <div class="card">
-      <h2>About the Creator</h2>
-      <p>
-        I am a student interested in becoming a nurse practitioner. I built NurseMind AI to
-        explore how technology can support patient safety, nursing judgment, and education.
-      </p>
-    </div>
+          <div class="section">
+            <h3>Top 3 Immediate Concerns</h3>
+            <ul id="topConcerns"></ul>
+          </div>
 
-    <div class="card results" id="resultsCard">
-      <span class="pill">Interactive Analysis</span>
-      <span class="pill">Clinical Reasoning Output</span>
-      <h2>Results</h2>
+          <div class="section">
+            <h3>Primary Nursing Domain</h3>
+            <p id="primaryDomain"></p>
+          </div>
 
-      <div id="urgentBox" class="urgent-box">
-        <strong>Urgent Review Recommended:</strong> This case includes higher-risk findings
-        that may require rapid nursing escalation.
+          <div class="section">
+            <h3>Case Tags</h3>
+            <div class="tag-wrap" id="caseTags"></div>
+          </div>
+
+          <div class="section">
+            <h3>Recommended Nurse Focus</h3>
+            <ul id="nurseFocus"></ul>
+          </div>
+
+          <div class="section">
+            <h3>Risk Flags</h3>
+            <ul id="riskFlags"></ul>
+          </div>
+
+          <div class="section">
+            <h3>Priority Nursing Actions</h3>
+            <ul id="actions"></ul>
+          </div>
+
+          <div class="section">
+            <h3>Monitoring Focus</h3>
+            <ul id="monitoring"></ul>
+          </div>
+
+          <div class="section">
+            <h3>Patient Education</h3>
+            <ul id="education"></ul>
+          </div>
+
+          <div class="section">
+            <h3>Why These Were Flagged</h3>
+            <ul id="reasons"></ul>
+          </div>
+
+          <div class="section">
+            <h3>Recommended Reassessment</h3>
+            <ul id="reassessment"></ul>
+          </div>
+
+          <div class="section">
+            <h3>Shift Handoff Summary</h3>
+            <p id="handoffSummary"></p>
+          </div>
+
+          <div class="section">
+            <h3>Escalation Level</h3>
+            <p id="escalation"></p>
+          </div>
+        </div>
       </div>
-
-      <div id="goodBox" class="good-box">
-        <strong>Lower-Acuity Case:</strong> This patient case does not currently trigger major
-        urgent warning signs based on the entered information.
-      </div>
-
-      <h3>Clinical Summary</h3>
-      <p id="clinicalSummary"></p>
-
-      <h3>Severity Score</h3>
-      <p id="severityScore"></p>
-
-      <h3>Priority Level</h3>
-      <p id="priorityLevel"></p>
-
-      <h3>Recommended Nurse Focus</h3>
-      <ul id="nurseFocus"></ul>
-
-      <h3>Risk Flags</h3>
-      <ul id="riskFlags"></ul>
-
-      <h3>Priority Nursing Actions</h3>
-      <ul id="actions"></ul>
-
-      <h3>Monitoring Focus</h3>
-      <ul id="monitoring"></ul>
-
-      <h3>Patient Education</h3>
-      <ul id="education"></ul>
-
-      <h3>Why These Were Flagged</h3>
-      <ul id="reasons"></ul>
-
-      <h3>Recommended Reassessment</h3>
-      <ul id="reassessment"></ul>
-
-      <h3>Escalation Level</h3>
-      <p id="escalation"></p>
     </div>
   </div>
 
@@ -367,72 +514,41 @@
       const selected = document.getElementById("sampleCase").value;
 
       if (selected === "fall") {
-        document.getElementById("age").value = 82;
-        document.getElementById("bp").value = 90;
-        document.getElementById("temp").value = 98.4;
-        document.getElementById("oxygen").value = 96;
-        document.getElementById("heartRate").value = 96;
-        document.getElementById("pain").value = 2;
-        document.getElementById("mobility").value = "Needs assistance";
-        document.getElementById("mentalStatus").value = "Alert and oriented";
-        document.getElementById("appetite").value = "Poor";
-        document.getElementById("fluidIntake").value = "Reduced";
-        document.getElementById("fallHistory").value = "Yes";
-        document.getElementById("condition").value = "hypertension";
-        document.getElementById("symptoms").value = "dizziness, weakness";
-        document.getElementById("meds").value = "blood pressure medication";
+        setCase(82, 90, 98.4, 96, 96, 2, "Needs assistance", "Alert and oriented", "Poor", "Reduced", "Yes", "hypertension", "dizziness, weakness", "blood pressure medication");
       }
 
       if (selected === "respiratory") {
-        document.getElementById("age").value = 68;
-        document.getElementById("bp").value = 108;
-        document.getElementById("temp").value = 101.5;
-        document.getElementById("oxygen").value = 90;
-        document.getElementById("heartRate").value = 118;
-        document.getElementById("pain").value = 5;
-        document.getElementById("mobility").value = "Needs assistance";
-        document.getElementById("mentalStatus").value = "Confused";
-        document.getElementById("appetite").value = "Poor";
-        document.getElementById("fluidIntake").value = "Reduced";
-        document.getElementById("fallHistory").value = "No";
-        document.getElementById("condition").value = "COPD";
-        document.getElementById("symptoms").value = "cough, shortness of breath, fever, weakness";
-        document.getElementById("meds").value = "inhaler, antibiotic";
+        setCase(68, 108, 101.5, 90, 118, 5, "Needs assistance", "Confused", "Poor", "Reduced", "No", "COPD", "cough, shortness of breath, fever, weakness", "inhaler, antibiotic");
       }
 
       if (selected === "dehydration") {
-        document.getElementById("age").value = 74;
-        document.getElementById("bp").value = 94;
-        document.getElementById("temp").value = 99.1;
-        document.getElementById("oxygen").value = 97;
-        document.getElementById("heartRate").value = 112;
-        document.getElementById("pain").value = 4;
-        document.getElementById("mobility").value = "Needs assistance";
-        document.getElementById("mentalStatus").value = "Lethargic";
-        document.getElementById("appetite").value = "Not eating";
-        document.getElementById("fluidIntake").value = "Very low";
-        document.getElementById("fallHistory").value = "No";
-        document.getElementById("condition").value = "diabetes";
-        document.getElementById("symptoms").value = "weakness, vomiting, diarrhea";
-        document.getElementById("meds").value = "antibiotic";
+        setCase(74, 94, 99.1, 97, 112, 4, "Needs assistance", "Lethargic", "Not eating", "Very low", "No", "diabetes", "weakness, vomiting, diarrhea", "antibiotic");
       }
 
       if (selected === "postop") {
-        document.getElementById("age").value = 59;
-        document.getElementById("bp").value = 102;
-        document.getElementById("temp").value = 100.8;
-        document.getElementById("oxygen").value = 93;
-        document.getElementById("heartRate").value = 116;
-        document.getElementById("pain").value = 8;
-        document.getElementById("mobility").value = "Needs assistance";
-        document.getElementById("mentalStatus").value = "Alert and oriented";
-        document.getElementById("appetite").value = "Poor";
-        document.getElementById("fluidIntake").value = "Reduced";
-        document.getElementById("fallHistory").value = "No";
-        document.getElementById("condition").value = "recent surgery";
-        document.getElementById("symptoms").value = "pain, weakness, fever, shortness of breath";
-        document.getElementById("meds").value = "pain medication, antibiotic";
+        setCase(59, 102, 100.8, 93, 116, 8, "Needs assistance", "Alert and oriented", "Poor", "Reduced", "No", "recent surgery", "pain, weakness, fever, shortness of breath", "pain medication, antibiotic");
       }
+
+      if (selected === "medication") {
+        setCase(71, 92, 98.6, 97, 89, 3, "Needs assistance", "Alert and oriented", "Poor", "Reduced", "No", "hypertension", "dizziness, weakness", "blood pressure medication, antibiotic");
+      }
+    }
+
+    function setCase(age, bp, temp, oxygen, heartRate, pain, mobility, mentalStatus, appetite, fluidIntake, fallHistory, condition, symptoms, meds) {
+      document.getElementById("age").value = age;
+      document.getElementById("bp").value = bp;
+      document.getElementById("temp").value = temp;
+      document.getElementById("oxygen").value = oxygen;
+      document.getElementById("heartRate").value = heartRate;
+      document.getElementById("pain").value = pain;
+      document.getElementById("mobility").value = mobility;
+      document.getElementById("mentalStatus").value = mentalStatus;
+      document.getElementById("appetite").value = appetite;
+      document.getElementById("fluidIntake").value = fluidIntake;
+      document.getElementById("fallHistory").value = fallHistory;
+      document.getElementById("condition").value = condition;
+      document.getElementById("symptoms").value = symptoms;
+      document.getElementById("meds").value = meds;
     }
 
     function analyzeCase() {
@@ -458,23 +574,34 @@
       const reasons = [];
       const reassessment = [];
       const nurseFocus = [];
+      const caseTags = [];
       let escalation = "Low";
       let priorityLevel = "Low Priority";
       let severity = 0;
 
-      function raiseToModerate() {
+      function addSeverity(points) {
+        severity += points;
+      }
+
+      function makeModerate() {
         if (escalation === "Low") escalation = "Moderate";
         if (priorityLevel === "Low Priority") priorityLevel = "Moderate Priority";
       }
 
-      function raiseToHigh() {
+      function makeHigh() {
         escalation = "High";
         priorityLevel = "High Priority";
       }
 
-      function addSeverity(points) {
-        severity += points;
-      }
+      if (age >= 65) caseTags.push("Older Adult");
+      if (mobility === "Needs assistance" || mobility === "Bedbound") caseTags.push("Mobility Support");
+      if (mentalStatus !== "Alert and oriented") caseTags.push("Neuro Watch");
+      if (temp >= 100.4 || symptoms.includes("fever")) caseTags.push("Possible Infection");
+      if (oxygen < 94 || symptoms.includes("shortness of breath")) caseTags.push("Respiratory");
+      if (fallHistory === "Yes") caseTags.push("Fall History");
+      if (condition.includes("diabetes")) caseTags.push("Chronic Condition");
+      if (condition.includes("hypertension")) caseTags.push("Blood Pressure");
+      if (condition.includes("recent surgery")) caseTags.push("Post-Op");
 
       if (age >= 65 && symptoms.includes("dizziness")) {
         riskFlags.push("Fall risk");
@@ -483,8 +610,8 @@
         education.push("Stand up slowly and ask for help before walking.");
         reasons.push("Older age plus dizziness increases the chance of falling.");
         reassessment.push("Reassess dizziness after movement and position changes.");
-        nurseFocus.push("Immediate patient safety and fall prevention.");
-        raiseToModerate();
+        nurseFocus.push("Protect immediate patient safety and prevent injury.");
+        makeModerate();
         addSeverity(2);
       }
 
@@ -492,11 +619,11 @@
         riskFlags.push("Repeat fall concern");
         actions.push("Apply fall precautions and keep needed items within reach.");
         monitoring.push("Monitor safety with transfers and ambulation.");
-        education.push("Use assistance devices and do not walk alone if unsteady.");
+        education.push("Use support and avoid walking alone if unsteady.");
         reasons.push("A recent fall increases the chance of another fall.");
-        reassessment.push("Reassess mobility and fall safety plan regularly.");
-        nurseFocus.push("Prevent repeat injury and support safe mobility.");
-        raiseToModerate();
+        reassessment.push("Reassess fall precautions and mobility plan.");
+        nurseFocus.push("Reduce repeat fall risk through prevention.");
+        makeModerate();
         addSeverity(2);
       }
 
@@ -505,10 +632,10 @@
         actions.push("Support safe movement and repositioning.");
         monitoring.push("Monitor skin integrity and activity tolerance.");
         education.push("Ask for help with movement to prevent injury.");
-        reasons.push("Limited mobility can increase safety and skin risks.");
-        reassessment.push("Reassess mobility status during care.");
-        nurseFocus.push("Protect mobility and prevent complications from reduced movement.");
-        raiseToModerate();
+        reasons.push("Limited mobility increases safety and skin risks.");
+        reassessment.push("Reassess mobility throughout care.");
+        nurseFocus.push("Support safe positioning and movement.");
+        makeModerate();
         addSeverity(1);
       }
 
@@ -517,22 +644,22 @@
         actions.push("Recheck blood pressure and assess for fainting or weakness.");
         monitoring.push("Monitor dizziness, weakness, and blood pressure trends.");
         education.push("Report fainting, worsening dizziness, or weakness.");
-        reasons.push("Low systolic blood pressure can reduce stability and cause dizziness.");
-        reassessment.push("Repeat blood pressure after rest or position change.");
-        nurseFocus.push("Monitor circulation and reduce instability risk.");
-        raiseToModerate();
+        reasons.push("Low systolic blood pressure can reduce stability and increase weakness.");
+        reassessment.push("Repeat blood pressure after rest or repositioning.");
+        nurseFocus.push("Monitor circulation and instability closely.");
+        makeModerate();
         addSeverity(2);
       }
 
       if (temp >= 100.4 || symptoms.includes("fever")) {
         riskFlags.push("Possible infection");
-        actions.push("Monitor temperature and watch for worsening symptoms.");
-        monitoring.push("Track fever pattern and overall condition.");
-        education.push("Take medicine exactly as prescribed and report worsening fever.");
+        actions.push("Monitor temperature and overall symptom progression.");
+        monitoring.push("Track fever pattern and general condition.");
+        education.push("Take medicine as directed and report worsening fever.");
         reasons.push("Fever may suggest infection or worsening illness.");
         reassessment.push("Recheck temperature later in the shift.");
-        nurseFocus.push("Watch for infection progression.");
-        raiseToModerate();
+        nurseFocus.push("Watch for signs of worsening infection.");
+        makeModerate();
         addSeverity(2);
       }
 
@@ -540,47 +667,47 @@
         riskFlags.push("Respiratory concern");
         actions.push("Assess breathing immediately and monitor oxygen closely.");
         monitoring.push("Watch breathing effort, oxygen level, and fatigue.");
-        education.push("Get help right away for trouble breathing.");
+        education.push("Get help immediately for worsening breathing.");
         reasons.push("Low oxygen or shortness of breath can signal significant respiratory compromise.");
-        reassessment.push("Reassess oxygen level and breathing status promptly.");
-        nurseFocus.push("Airway, breathing, and oxygenation are top priority.");
-        raiseToHigh();
+        reassessment.push("Reassess oxygen level and breathing promptly.");
+        nurseFocus.push("Prioritize airway, breathing, and oxygenation.");
+        makeHigh();
         addSeverity(4);
       }
 
-      if (symptoms.includes("cough") && temp >= 100.4) {
+      if (symptoms.includes("cough") && (temp >= 100.4 || symptoms.includes("fever"))) {
         riskFlags.push("Possible respiratory infection");
         actions.push("Observe for worsening cough, fever, and breathing changes.");
         monitoring.push("Monitor cough, sputum changes, and oxygen status.");
-        education.push("Report worsening cough, fever, or breathing difficulty.");
+        education.push("Report worsening cough, fever, or trouble breathing.");
         reasons.push("Cough plus fever may suggest infection affecting the respiratory system.");
         reassessment.push("Reassess respiratory symptoms frequently.");
-        nurseFocus.push("Watch for infection-related breathing decline.");
-        raiseToModerate();
+        nurseFocus.push("Monitor for infection-related breathing decline.");
+        makeModerate();
         addSeverity(2);
       }
 
       if (heartRate > 110) {
         riskFlags.push("Elevated heart rate");
         actions.push("Assess for pain, dehydration, fever, or stress response.");
-        monitoring.push("Track pulse and overall status.");
-        education.push("Report palpitations, chest discomfort, or worsening weakness.");
-        reasons.push("A high heart rate can reflect physiological stress or worsening condition.");
+        monitoring.push("Track pulse and overall stability.");
+        education.push("Report chest discomfort, palpitations, or worsening weakness.");
+        reasons.push("A high heart rate can reflect physiological stress or deterioration.");
         reassessment.push("Recheck heart rate after rest.");
-        nurseFocus.push("Monitor for signs of increasing physiological stress.");
-        raiseToModerate();
+        nurseFocus.push("Watch for worsening stress response.");
+        makeModerate();
         addSeverity(2);
       }
 
       if (pain >= 7) {
         riskFlags.push("High pain burden");
-        actions.push("Assess pain location, severity, and effect on function.");
+        actions.push("Assess pain location, intensity, and impact on function.");
         monitoring.push("Monitor pain response and comfort level.");
         education.push("Report pain that worsens or does not improve.");
-        reasons.push("Severe pain can affect mobility, breathing, rest, and recovery.");
+        reasons.push("Severe pain can affect breathing, mobility, rest, and recovery.");
         reassessment.push("Reassess pain after intervention.");
-        nurseFocus.push("Improve comfort while checking for underlying complications.");
-        raiseToModerate();
+        nurseFocus.push("Address pain while checking for deeper complications.");
+        makeModerate();
         addSeverity(2);
       }
 
@@ -591,57 +718,57 @@
         monitoring.push("Watch weakness, intake, output, and dry mouth.");
         education.push("Drink fluids if allowed and report worsening weakness.");
         reasons.push("Poor intake plus fluid loss symptoms can lead to dehydration.");
-        reassessment.push("Reassess intake and hydration status.");
-        nurseFocus.push("Protect hydration status and monitor weakness.");
-        raiseToModerate();
+        reassessment.push("Reassess hydration and intake status.");
+        nurseFocus.push("Protect hydration and energy status.");
+        makeModerate();
         addSeverity(2);
       }
 
       if (mentalStatus === "Confused" || mentalStatus === "Lethargic") {
         riskFlags.push("Mental status change");
         actions.push("Assess orientation, safety, and need for provider notification.");
-        monitoring.push("Monitor confusion, alertness, and behavior changes.");
+        monitoring.push("Monitor alertness, confusion, and behavior changes.");
         education.push("New confusion or severe sleepiness should be reported right away.");
-        reasons.push("A change in mental status can be a serious warning sign.");
+        reasons.push("A mental status change can be a serious warning sign.");
         reassessment.push("Reassess mental status frequently.");
         nurseFocus.push("Protect safety and respond quickly to neurological changes.");
-        raiseToHigh();
+        makeHigh();
         addSeverity(4);
       }
 
       if (meds.includes("antibiotic") && symptoms.includes("dizziness")) {
         riskFlags.push("Possible medication side effect");
-        actions.push("Review recent medication changes and timing.");
-        monitoring.push("Track symptom timing after medication use.");
+        actions.push("Review medication timing and recent changes.");
+        monitoring.push("Track symptoms after medication use.");
         education.push("Tell a provider if symptoms started after a new medicine.");
-        reasons.push("New symptoms after starting a medication may point to a side effect.");
+        reasons.push("New symptoms after starting medication may indicate a side effect.");
         reassessment.push("Reassess symptoms after medication review.");
-        nurseFocus.push("Compare symptom onset with medication changes.");
-        raiseToModerate();
+        nurseFocus.push("Compare new symptoms with medication changes.");
+        makeModerate();
         addSeverity(1);
       }
 
       if (condition.includes("diabetes") && appetite === "Not eating") {
         riskFlags.push("Blood sugar management concern");
-        actions.push("Assess eating pattern and risk from reduced intake.");
-        monitoring.push("Monitor for weakness, confusion, or other glucose-related symptoms.");
+        actions.push("Assess eating pattern and instability risk from low intake.");
+        monitoring.push("Monitor weakness, confusion, and intake pattern.");
         education.push("Do not ignore poor intake when living with diabetes.");
-        reasons.push("Poor intake in a person with diabetes can increase risk of instability.");
+        reasons.push("Poor intake in diabetes can increase instability risk.");
         reassessment.push("Reassess intake and overall symptoms.");
-        nurseFocus.push("Monitor instability related to poor intake and chronic illness.");
-        raiseToModerate();
+        nurseFocus.push("Watch chronic disease risk alongside poor intake.");
+        makeModerate();
         addSeverity(2);
       }
 
       if (condition.includes("hypertension") && bp < 95 && meds.includes("blood pressure")) {
-        riskFlags.push("Possible overtreatment or medication-related hypotension");
+        riskFlags.push("Possible medication-related hypotension");
         actions.push("Review blood pressure medication timing and recent changes.");
-        monitoring.push("Monitor blood pressure pattern and symptom severity.");
+        monitoring.push("Monitor blood pressure pattern and dizziness severity.");
         education.push("Report dizziness or fainting after taking blood pressure medicine.");
-        reasons.push("Low blood pressure in a patient taking blood pressure medication may need closer review.");
-        reassessment.push("Repeat blood pressure and symptom check after medication review.");
+        reasons.push("Low blood pressure while taking blood pressure medication may need closer review.");
+        reassessment.push("Repeat blood pressure and symptom check after review.");
         nurseFocus.push("Consider medication-related causes of instability.");
-        raiseToModerate();
+        makeModerate();
         addSeverity(2);
       }
 
@@ -649,11 +776,11 @@
         riskFlags.push("Post-surgical complication concern");
         actions.push("Assess for worsening post-operative complications and notify provider as needed.");
         monitoring.push("Watch fever, pain, breathing, and functional recovery.");
-        education.push("Report worsening pain, fever, or breathing problems right away.");
-        reasons.push("Fever, breathing changes, or severe pain after surgery may require closer evaluation.");
-        reassessment.push("Reassess pain, temperature, and breathing status promptly.");
+        education.push("Report worsening pain, fever, or breathing problems immediately.");
+        reasons.push("Fever, severe pain, or breathing changes after surgery may require urgent evaluation.");
+        reassessment.push("Reassess pain, temperature, and breathing promptly.");
         nurseFocus.push("Identify early warning signs of post-operative decline.");
-        raiseToHigh();
+        makeHigh();
         addSeverity(4);
       }
 
@@ -673,13 +800,18 @@
       } else if (severity >= 5 && escalation !== "High") {
         priorityLevel = "Moderate Priority";
         escalation = "Moderate";
-      } else if (severity < 5 && escalation !== "High" && priorityLevel !== "Moderate Priority") {
+      } else if (severity < 5 && escalation !== "High") {
         priorityLevel = "Low Priority";
         escalation = "Low";
       }
 
-      const clinicalSummary = buildSummary(age, riskFlags, priorityLevel, escalation);
+      const stabilityLevel = escalation === "High" ? "Unstable" : escalation === "Moderate" ? "Needs Close Monitoring" : "Relatively Stable";
+      const topConcerns = uniqueItems(riskFlags).slice(0, 3);
+      const primaryDomain = choosePrimaryDomain(uniqueItems(riskFlags), uniqueItems(nurseFocus));
+      const clinicalSummary = buildSummary(age, topConcerns, priorityLevel, escalation, stabilityLevel);
+      const handoffSummary = buildHandoffSummary(age, topConcerns, priorityLevel, escalation);
 
+      renderList("topConcerns", topConcerns);
       renderList("nurseFocus", uniqueItems(nurseFocus));
       renderList("riskFlags", uniqueItems(riskFlags));
       renderList("actions", uniqueItems(actions));
@@ -687,32 +819,64 @@
       renderList("education", uniqueItems(education));
       renderList("reasons", uniqueItems(reasons));
       renderList("reassessment", uniqueItems(reassessment));
+      renderTags("caseTags", uniqueItems(caseTags));
 
       document.getElementById("clinicalSummary").textContent = clinicalSummary;
+      document.getElementById("handoffSummary").textContent = handoffSummary;
+      document.getElementById("primaryDomain").textContent = primaryDomain;
       document.getElementById("severityScore").textContent = severity + " / 20";
-      
-      const escalationElement = document.getElementById("escalation");
-      escalationElement.textContent = escalation;
-      escalationElement.className =
-        escalation === "High" ? "high" :
-        escalation === "Moderate" ? "moderate" : "low";
+      document.getElementById("stabilityLevel").textContent = stabilityLevel;
 
-      const priorityElement = document.getElementById("priorityLevel");
-      priorityElement.textContent = priorityLevel;
-      priorityElement.className =
-        priorityLevel === "High Priority" ? "high" :
-        priorityLevel === "Moderate Priority" ? "moderate" : "low";
+      const severityEl = document.getElementById("severityScore");
+      severityEl.className = "metric-value " + (severity >= 10 ? "score-high" : severity >= 5 ? "score-moderate" : "score-low");
 
-      document.getElementById("urgentBox").style.display = escalation === "High" ? "block" : "none";
-      document.getElementById("goodBox").style.display = escalation === "Low" ? "block" : "none";
+      const priorityEl = document.getElementById("priorityLevel");
+      priorityEl.textContent = priorityLevel;
+      priorityEl.className = "metric-value " + (priorityLevel === "High Priority" ? "score-high" : priorityLevel === "Moderate Priority" ? "score-moderate" : "score-low");
+
+      const stabilityEl = document.getElementById("stabilityLevel");
+      stabilityEl.className = "metric-value " + (stabilityLevel === "Unstable" ? "score-high" : stabilityLevel === "Needs Close Monitoring" ? "score-moderate" : "score-low");
+
+      const escalationEl = document.getElementById("escalation");
+      escalationEl.textContent = escalation;
+      escalationEl.className = escalation === "High" ? "score-high" : escalation === "Moderate" ? "score-moderate" : "score-low";
+
+      document.getElementById("highBanner").style.display = escalation === "High" ? "block" : "none";
+      document.getElementById("lowBanner").style.display = escalation === "Low" ? "block" : "none";
       document.getElementById("resultsCard").style.display = "block";
     }
 
-    function buildSummary(age, risks, priority, escalation) {
-      let topRisks = risks.slice(0, 3).join(", ");
-      return "This " + age + "-year-old patient case was classified as " + priority.toLowerCase() +
-        " with an escalation level of " + escalation.toLowerCase() +
-        ". The main concerns identified were: " + topRisks + ".";
+    function choosePrimaryDomain(risks, focus) {
+      const text = (risks.join(" ") + " " + focus.join(" ")).toLowerCase();
+
+      if (text.includes("respiratory") || text.includes("breathing") || text.includes("oxygen")) {
+        return "Respiratory stability and oxygenation";
+      }
+      if (text.includes("fall") || text.includes("mobility") || text.includes("injury")) {
+        return "Safety, mobility, and fall prevention";
+      }
+      if (text.includes("infection") || text.includes("fever")) {
+        return "Infection monitoring and early deterioration detection";
+      }
+      if (text.includes("mental status") || text.includes("neurological")) {
+        return "Neurological monitoring and patient safety";
+      }
+      if (text.includes("dehydration") || text.includes("hydration")) {
+        return "Hydration support and symptom monitoring";
+      }
+      return "General patient safety and clinical monitoring";
+    }
+
+    function buildSummary(age, concerns, priority, escalation, stability) {
+      return "This " + age + "-year-old patient was classified as " + priority.toLowerCase() +
+        " with a " + escalation.toLowerCase() + " escalation level and an overall stability status of " +
+        stability.toLowerCase() + ". The most immediate concerns identified were " + concerns.join(", ").toLowerCase() + ".";
+    }
+
+    function buildHandoffSummary(age, concerns, priority, escalation) {
+      return "Handoff summary: " + age + "-year-old patient with " + concerns.join(", ").toLowerCase() +
+        ". Current assessment suggests " + priority.toLowerCase() + " with " + escalation.toLowerCase() +
+        " escalation. Continue close monitoring, reinforce patient safety, and reassess for any worsening symptoms.";
     }
 
     function renderList(elementId, items) {
@@ -722,6 +886,17 @@
         const li = document.createElement("li");
         li.textContent = item;
         ul.appendChild(li);
+      });
+    }
+
+    function renderTags(elementId, items) {
+      const wrap = document.getElementById(elementId);
+      wrap.innerHTML = "";
+      items.forEach(item => {
+        const span = document.createElement("span");
+        span.className = "pill";
+        span.textContent = item;
+        wrap.appendChild(span);
       });
     }
 
