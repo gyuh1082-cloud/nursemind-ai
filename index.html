@@ -579,6 +579,16 @@
       let priorityLevel = "Low Priority";
       let severity = 0;
 
+      // ------------------------------
+// CLINICAL DOMAIN SCORING SYSTEM
+// ------------------------------
+let domains = {
+  respiratory: 0,
+  cardiovascular: 0,
+  neurological: 0,
+  safety: 0,
+  metabolic: 0
+};
       function addSeverity(points) {
         severity += points;
       }
@@ -603,7 +613,20 @@
       if (condition.includes("hypertension")) caseTags.push("Blood Pressure");
       if (condition.includes("recent surgery")) caseTags.push("Post-Op");
 
-      if (age >= 65 && symptoms.includes("dizziness")) {
+     if (age >= 65 && symptoms.includes("dizziness")) {
+  riskFlags.push("Fall risk");
+
+  domains.safety += 3;
+  severity += 2;
+
+  actions.push("Assist with ambulation and ensure fall precautions.");
+  monitoring.push("Monitor gait stability and dizziness on standing.");
+  education.push("Ask for help before walking or standing.");
+  reasons.push("Age + dizziness increases fall probability significantly.");
+  reassessment.push("Reassess mobility and dizziness after movement.");
+  nurseFocus.push("Prevent injury through safety precautions.");
+  makeModerate();
+}
         riskFlags.push("Fall risk");
         actions.push("Assist with walking and prevent walking alone.");
         monitoring.push("Watch balance, gait, and dizziness when standing.");
@@ -639,7 +662,21 @@
         addSeverity(1);
       }
 
-      if (bp < 95) {
+     if (bp < 95) {
+  riskFlags.push("Low blood pressure concern");
+
+  domains.cardiovascular += 2;
+  severity += 2;
+
+  actions.push("Recheck blood pressure and assess for fainting or weakness.");
+  monitoring.push("Monitor dizziness, weakness, and blood pressure trends.");
+  education.push("Report fainting, worsening dizziness, or weakness.");
+  reasons.push("Low blood pressure can reduce perfusion and cause instability.");
+  reassessment.push("Repeat blood pressure after rest or repositioning.");
+  nurseFocus.push("Monitor circulatory stability closely.");
+
+  makeModerate();
+}
         riskFlags.push("Low blood pressure concern");
         actions.push("Recheck blood pressure and assess for fainting or weakness.");
         monitoring.push("Monitor dizziness, weakness, and blood pressure trends.");
@@ -664,6 +701,19 @@
       }
 
       if (oxygen < 94 || symptoms.includes("shortness of breath")) {
+  riskFlags.push("Respiratory concern");
+
+  domains.respiratory += 4;
+  severity += 4;
+
+  actions.push("Assess breathing immediately and monitor oxygen closely.");
+  monitoring.push("Watch breathing effort, oxygen level, and fatigue.");
+  education.push("Get help immediately for worsening breathing.");
+  reasons.push("Low oxygen or breathing difficulty signals possible respiratory compromise.");
+  reassessment.push("Reassess oxygen and respiratory effort frequently.");
+  nurseFocus.push("Prioritize airway and oxygenation.");
+  makeHigh();
+}
         riskFlags.push("Respiratory concern");
         actions.push("Assess breathing immediately and monitor oxygen closely.");
         monitoring.push("Watch breathing effort, oxygen level, and fatigue.");
@@ -725,6 +775,19 @@
       }
 
       if (mentalStatus === "Confused" || mentalStatus === "Lethargic") {
+  riskFlags.push("Altered mental status");
+
+  domains.neurological += 4;
+  severity += 4;
+
+  actions.push("Assess orientation and notify provider if worsening.");
+  monitoring.push("Monitor confusion, alertness, and behavior changes.");
+  education.push("Report any new confusion or sleepiness immediately.");
+  reasons.push("Changes in mental status can indicate serious underlying conditions.");
+  reassessment.push("Frequent neurological reassessment required.");
+  nurseFocus.push("Maintain patient safety and monitor cognition.");
+  makeHigh();
+}
         riskFlags.push("Mental status change");
         actions.push("Assess orientation, safety, and need for provider notification.");
         monitoring.push("Monitor alertness, confusion, and behavior changes.");
@@ -806,7 +869,26 @@
       }
 
       const stabilityLevel = escalation === "High" ? "Unstable" : escalation === "Moderate" ? "Needs Close Monitoring" : "Relatively Stable";
-      const topConcerns = uniqueItems(riskFlags).slice(0, 3);
+      // ------------------------------
+// DOMAIN INTERPRETATION LAYER
+// ------------------------------
+let dominantDomain = "General Safety";
+
+let maxDomain = Math.max(
+  domains.respiratory,
+  domains.cardiovascular,
+  domains.neurological,
+  domains.safety,
+  domains.metabolic
+);
+
+if (maxDomain === domains.respiratory) dominantDomain = "Respiratory Stability";
+else if (maxDomain === domains.cardiovascular) dominantDomain = "Cardiovascular Stability";
+else if (maxDomain === domains.neurological) dominantDomain = "Neurological Status";
+else if (maxDomain === domains.safety) dominantDomain = "Patient Safety / Mobility";
+else if (maxDomain === domains.metabolic) dominantDomain = "Metabolic / Nutrition";
+
+document.getElementById("primaryDomain").textContent = dominantDomain;
       const primaryDomain = choosePrimaryDomain(uniqueItems(riskFlags), uniqueItems(nurseFocus));
       const clinicalSummary = buildSummary(age, topConcerns, priorityLevel, escalation, stabilityLevel);
       const handoffSummary = buildHandoffSummary(age, topConcerns, priorityLevel, escalation);
@@ -824,7 +906,11 @@
       document.getElementById("clinicalSummary").textContent = clinicalSummary;
       document.getElementById("handoffSummary").textContent = handoffSummary;
       document.getElementById("primaryDomain").textContent = primaryDomain;
-      document.getElementById("severityScore").textContent = severity + " / 20";
+      document.getElementById("severityScore").textContent =
+  severity + " / 20 (Resp: " + domains.respiratory +
+  ", Cardio: " + domains.cardiovascular +
+  ", Neuro: " + domains.neurological +
+  ")";
       document.getElementById("stabilityLevel").textContent = stabilityLevel;
 
       const severityEl = document.getElementById("severityScore");
