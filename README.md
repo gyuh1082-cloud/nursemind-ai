@@ -42,4 +42,4 @@ Improve the design
 Add an AI-generated clinical summary
 Add more patient education support
 Disclaimer
-This project is for educational purposes only. It does not diagnose, treat, or replace professional medical judgment.      here's the readme.md
+This project is for educational purposes only. It does not diagnose, treat, or replace professional medical judgment.     
