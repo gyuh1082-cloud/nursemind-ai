@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -271,35 +271,15 @@
 <body>
   <div class="container">
 
-   <p>
-NurseMind AI is a rule-based clinical decision support simulation that models nursing triage reasoning using structured logic, severity scoring, and escalation thresholds. It evaluates patient inputs such as vitals, symptoms, and medications to generate prioritized safety responses, monitoring plans, and clinical explanations.
-</p>
-    <div class="card">
-<h2>System Architecture</h2>
-
-<p>The system is structured as a deterministic clinical reasoning pipeline:</p>
-
-<pre>
-Patient Inputs
-(age, symptoms, vitals, medications)
-        ↓
-Rule-Based Clinical Engine
-(if-then safety logic)
-        ↓
-Severity Scoring System
-(weighted risk accumulation)
-        ↓
-Escalation Controller
-(low → moderate → high priority)
-        ↓
-Output Generator
-(risks, actions, monitoring, education)
-</pre>
-
-<p class="small-note">
-This architecture prioritizes interpretability and safety over probabilistic AI decision-making.
-</p>
-</div>
+    <div class="hero">
+      <h1>NurseMind AI 🩺</h1>
+      <p class="subtitle">Advanced Clinical Risk, Patient Safety, and Nursing Priorities Simulator</p>
+      <p>
+        I built NurseMind AI to reflect how nurses think in real patient care settings: noticing early warning signs,
+        protecting patient safety, prioritizing what matters most, and educating patients clearly. This project combines
+        my interest in becoming a nurse practitioner with my interest in technology and human-centered healthcare.
+      </p>
+      <div class="chip-row">
         <span class="chip">Clinical Reasoning</span>
         <span class="chip">Patient Safety</span>
         <span class="chip">Nursing Judgment</span>
@@ -331,28 +311,6 @@ This architecture prioritizes interpretability and safety over probabilistic AI 
 
           <div class="input-grid">
             <div>
-              <div class="card">
-  <h2>Severity Scoring Model</h2>
-
-  <p>The system assigns weighted values to clinical findings:</p>
-
-  <ul>
-    <li>Respiratory distress → +4</li>
-    <li>Mental status change → +4</li>
-    <li>Low blood pressure → +2</li>
-    <li>Fall risk indicators → +2</li>
-    <li>Infection indicators → +2</li>
-    <li>Dehydration risk → +2</li>
-  </ul>
-
-  <p><b>Score Interpretation:</b></p>
-
-  <ul>
-    <li>0–3: Low Priority</li>
-    <li>4–7: Moderate Priority</li>
-    <li>8+: High Priority (Escalation Triggered)</li>
-  </ul>
-</div>
               <label for="age">Patient age</label>
               <input type="number" id="age" value="78" min="0" max="120" />
             </div>
@@ -440,21 +398,9 @@ This architecture prioritizes interpretability and safety over probabilistic AI 
 
           <button onclick="analyzeCase()">Analyze Patient Case</button>
 
-         <div class="card">
-  <h2>Limitations</h2>
-
-  <ul>
-    <li>This system does not perform medical diagnosis</li>
-    <li>It cannot capture full clinical complexity or rare conditions</li>
-    <li>No real patient data is used</li>
-    <li>It is not integrated with hospital electronic health records</li>
-    <li>It is a deterministic rule-based simulation, not a probabilistic AI model</li>
-  </ul>
-
-  <p class="small-note">
-    These limitations are intentional to preserve interpretability and safety in a healthcare simulation context.
-  </p>
-</div>
+          <p class="disclaimer">
+            This project is for educational purposes only. It does not diagnose, treat, or replace professional medical judgment.
+          </p>
         </div>
 
         <div class="card footer-card">
@@ -621,28 +567,6 @@ This architecture prioritizes interpretability and safety over probabilistic AI 
       const fallHistory = document.getElementById("fallHistory").value;
       const condition = document.getElementById("condition").value.toLowerCase();
 
-      st.markdown("### Severity Scoring Model")
-
-st.write("The system assigns weighted values to clinical findings:")
-
-st.markdown("""
-- Respiratory distress → +4  
-- Mental status change → +4  
-- Low blood pressure → +2  
-- Fall risk indicators → +2  
-- Infection indicators → +2  
-- Dehydration risk → +2  
-""")
-
-st.markdown("### Score Interpretation")
-
-st.markdown("""
-- 0–3: Low Priority  
-- 4–7: Moderate Priority  
-- 8+: High Priority (Escalation Triggered)
-""")
-  st.markdown("## Clinical Severity Score")
-st.write(severity_score)
       const riskFlags = [];
       const actions = [];
       const monitoring = [];
@@ -981,4 +905,4 @@ st.write(severity_score)
     }
   </script>
 </body>
-</html>
+</html>      
